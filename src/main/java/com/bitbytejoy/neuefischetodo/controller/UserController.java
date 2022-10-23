@@ -9,11 +9,13 @@ import com.bitbytejoy.neuefischetodo.model.User;
 import com.bitbytejoy.neuefischetodo.repository.UserRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
-import java.util.Collections;
 import java.util.Map;
 
 @RestController
