@@ -21,6 +21,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 @Configuration
@@ -38,7 +40,20 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .csrf().disable()
-            .cors()
+            .cors().configurationSource(request -> {
+                CorsConfiguration corsConfiguration = new CorsConfiguration();
+                corsConfiguration.setAllowedHeaders(
+                    Arrays.asList("Authorization", "Content-Type")
+                );
+                corsConfiguration.setAllowedMethods(
+                    Arrays.asList("POST", "PUT", "GET", "DELETE")
+                );
+                corsConfiguration.setAllowedOrigins(
+                    List.of("http://localhost:3000")
+                );
+
+                return corsConfiguration;
+            })
 
             .and()
 
