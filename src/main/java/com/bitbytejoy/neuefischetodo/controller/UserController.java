@@ -7,6 +7,7 @@ import com.bitbytejoy.neuefischetodo.model.Login;
 import com.bitbytejoy.neuefischetodo.model.LoginResponse;
 import com.bitbytejoy.neuefischetodo.model.User;
 import com.bitbytejoy.neuefischetodo.repository.UserRepository;
+import com.google.gson.Gson;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
+import java.util.HashMap;
 import java.util.Map;
 
 @RestController
@@ -23,6 +25,7 @@ public class UserController {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final UserRepository userRepository;
     private final Props props;
+    private final Gson gson = new Gson();
 
     public UserController(
         BCryptPasswordEncoder bCryptPasswordEncoder,
@@ -63,13 +66,14 @@ public class UserController {
 
         LoginResponse loginResponse = new LoginResponse();
 
+        user.setPassword("");
+
         loginResponse.setJwt(
             JWT
                 .create()
-                .withPayload(Map.of(
-                    "id", user.getId(),
-                    "email", user.getEmail()
-                )).sign(Algorithm.HMAC256(props.getJwtSecret()))
+                .withPayload(
+                    gson.fromJson(gson.toJson(user), HashMap.class)
+                ).sign(Algorithm.HMAC256(props.getJwtSecret()))
         );
 
         return loginResponse;
